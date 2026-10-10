@@ -498,11 +498,17 @@ var CTA_URL = 'https://mentorado-axion.onrender.com/q/#pre-diagnostico-axion-a6k
   function tryPlay(){ var p = v.play(); if(p && p.catch) p.catch(function(){}); }
 
   // prévia sem som mostrando o início; pausa fora da tela para economizar
+  var inView = true;
   if(reduce){ v.removeAttribute('autoplay'); v.pause(); }
-  else new IntersectionObserver(function(es){
-    if(full) return;
-    if(es[0].isIntersecting) tryPlay(); else v.pause();
-  }, {threshold:.25}).observe(vf);
+  else {
+    new IntersectionObserver(function(es){
+      inView = es[0].isIntersecting;
+      if(full) return;
+      if(inView) tryPlay(); else v.pause();
+    }, {threshold:.25}).observe(vf);
+    // ao voltar para a aba, a prévia sem som volta a rodar
+    document.addEventListener('visibilitychange', function(){ if(!document.hidden && !full && inView) tryPlay(); });
+  }
 
   // clique: recomeça do início, com som
   over.addEventListener('click', function(){
