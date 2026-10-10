@@ -122,7 +122,8 @@ a{color:inherit}
 #dust{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
 .hero::before{content:"";position:absolute;left:50%;top:38%;width:min(1100px,160vw);aspect-ratio:1;translate:-50% 0;z-index:-2;background:radial-gradient(closest-side,rgba(214,163,41,.14),transparent 70%)}
 .hero .wrap{display:flex;flex-direction:column;align-items:center;text-align:center;padding-block:clamp(28px,5vw,64px) var(--sec)}
-.pre{margin:0 0 clamp(12px,2vw,20px);font-size:min(19px,calc((100vw - 32px) / 27));font-weight:600;line-height:1.35;letter-spacing:-.005em;animation:fadeUp .8s var(--ease) .2s both}
+.pre{display:inline-block;margin:0 0 clamp(14px,2vw,22px);padding:7px 13px;border:1px solid rgba(214,163,41,.38);border-radius:10px;background:rgba(214,163,41,.07);box-shadow:inset 0 1px 0 rgba(242,212,136,.08);
+  font-size:min(13px,calc((100vw - 76px) / 32));font-weight:500;line-height:1.3;letter-spacing:.005em;animation:fadeUp .8s var(--ease) .2s both}
 .h1{margin:0;max-width:16em;font-weight:700;font-size:clamp(30px,5vw,66px);line-height:1.04;letter-spacing:-.025em;text-transform:uppercase;text-wrap:balance}
 .h1 .w{display:inline-block;animation:wordIn .8s var(--ease) both;animation-delay:calc(.3s + var(--i,0)*.07s)}
 .hl{background:linear-gradient(var(--red),var(--red)) no-repeat 0 94%/0% .085em;animation:underline .7s cubic-bezier(.7,0,.2,1) 1.15s forwards;-webkit-box-decoration-break:clone;box-decoration-break:clone}
@@ -132,6 +133,9 @@ a{color:inherit}
 .sub strong{color:var(--white);font-weight:500}
 /* textos que precisam caber em linhas fixas: cada <span> é uma linha; o JS ajusta a fonte à largura da tela */
 .fit>span{display:block;white-space:nowrap}
+.pre .pip{display:inline-block;width:6px;height:6px;margin:0 8px 0 1px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 3px rgba(214,163,41,.18);vertical-align:.12em}
+.pre b{font-weight:600}
+@media (max-width:380px){.pre{padding:6px 10px;letter-spacing:0}.pre .pip{width:5px;height:5px;margin-right:6px}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}}
 
 /* ---------- motion ao rolar (primeiro bloco) ----------
@@ -326,7 +330,7 @@ a{color:inherit}
     <canvas id="dust" aria-hidden="true"></canvas>
     <div class="wrap">
       <div class="hcopy" id="hcopy">
-      <p class="pre gold fit" data-max="19"><span>Para quem já vende ou quer estruturar sua operação</span></p>
+      <p class="pre fit" data-max="13"><span><i class="pip"></i><b class="gold">Para quem já vende ou quer estruturar sua operação</b></span></p>
       <h1 class="h1">
         <span class="w" style="--i:0">Seu</span> <span class="w" style="--i:1">lucro</span> <span class="w" style="--i:2">não</span> <span class="w" style="--i:3">pode</span> <span class="w" style="--i:4">depender</span> <span class="w" style="--i:5">de</span> <span class="w" style="--i:6">um</span>
         <span class="hl"><span class="w" style="--i:7">criativo</span> <span class="w" style="--i:8">campeão</span></span><span class="w" style="--i:9"><span class="period"></span></span>
@@ -467,11 +471,12 @@ var CTA_URL = 'https://mentorado-axion.onrender.com/q/#pre-diagnostico-axion-a6k
     var cs = getComputedStyle(heroWrap);
     var avail = heroWrap.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     document.querySelectorAll('.fit').forEach(function(el){
+      var es = getComputedStyle(el), room = avail - parseFloat(es.paddingLeft) - parseFloat(es.paddingRight) - parseFloat(es.borderLeftWidth) - parseFloat(es.borderRightWidth);
       var max = +el.dataset.max;
       el.style.fontSize = max + 'px';
       var w = 0;
       el.querySelectorAll(':scope > span').forEach(function(s){ w = Math.max(w, s.scrollWidth); });
-      if(w > avail) el.style.fontSize = Math.max(10, Math.floor(max * avail / w * 10) / 10 - .1) + 'px';
+      if(w > room) el.style.fontSize = Math.max(9.5, Math.floor(max * room / w * 10) / 10 - .1) + 'px';
     });
   }
   fitText();
